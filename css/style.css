@@ -1834,6 +1834,567 @@ img {
     max-height: 300px;
 }
 
+/* --- Video Showcase Section --- */
+.video-showcase {
+    background: var(--dark-2);
+    overflow: hidden;
+}
+
+.video-wrapper {
+    position: relative;
+    max-width: 960px;
+    margin: 0 auto;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.video-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--primary), transparent 50%, var(--secondary));
+    border-radius: calc(var(--radius-lg) + 2px);
+    z-index: -1;
+    opacity: 0.5;
+}
+
+.video-wrapper video {
+    width: 100%;
+    display: block;
+    border-radius: var(--radius-lg);
+}
+
+.video-caption {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--gray-600);
+    font-style: italic;
+}
+
+/* --- WhatsApp Floating Button --- */
+.whatsapp-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 60px;
+    height: 60px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 28px;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    z-index: 999;
+    transition: var(--transition);
+    text-decoration: none;
+    animation: whatsappPulse 2s ease-in-out infinite;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1) translateY(-4px);
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
+    color: #fff;
+}
+
+.whatsapp-float .whatsapp-tooltip {
+    position: absolute;
+    right: 72px;
+    background: var(--dark-3);
+    color: var(--white);
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: var(--font-body);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.whatsapp-float:hover .whatsapp-tooltip {
+    opacity: 1;
+}
+
+@keyframes whatsappPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+    50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.6), 0 0 0 8px rgba(37, 211, 102, 0.1); }
+}
+
+/* --- Programme Detail Pages --- */
+.programme-hero {
+    padding: 160px 0 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.programme-hero.kettlebell {
+    background: linear-gradient(135deg, var(--dark) 0%, #1a2a1a 50%, var(--dark-2) 100%);
+}
+
+.programme-hero.boxing {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 50%, var(--dark-2) 100%);
+}
+
+.programme-hero.hybrid {
+    background: linear-gradient(135deg, var(--dark) 0%, #2a1a2a 50%, var(--dark-2) 100%);
+}
+
+.programme-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(230, 57, 70, 0.1) 0%, transparent 60%);
+}
+
+.programme-hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.programme-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 60px;
+    align-items: center;
+}
+
+.programme-hero-content .section-tag {
+    margin-bottom: 12px;
+}
+
+.programme-hero-content h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 16px;
+}
+
+.programme-hero-content .programme-tagline {
+    font-size: 18px;
+    color: var(--gray-400);
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.programme-meta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.meta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 16px;
+    border-radius: var(--radius-xl);
+    font-size: 13px;
+    color: var(--gray-300);
+}
+
+.meta-badge i {
+    color: var(--primary);
+    font-size: 12px;
+}
+
+/* Programme Price Card */
+.programme-price-card {
+    background: var(--dark-2);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px;
+    text-align: center;
+    position: sticky;
+    top: 100px;
+}
+
+.programme-price-card .price-tag {
+    font-family: var(--font-heading);
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+}
+
+.programme-price-card .price-period {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 24px;
+}
+
+.programme-price-card .includes-list {
+    text-align: left;
+    margin-bottom: 28px;
+}
+
+.programme-price-card .includes-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--gray-300);
+    margin-bottom: 12px;
+}
+
+.programme-price-card .includes-list li i {
+    color: var(--accent-green);
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.btn-buy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px 28px;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--white);
+    background: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    margin-bottom: 12px;
+}
+
+.btn-buy:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(230, 57, 70, 0.4);
+    color: var(--white);
+}
+
+.btn-whatsapp-buy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 28px;
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--white);
+    background: #25D366;
+    border: 2px solid #25D366;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.btn-whatsapp-buy:hover {
+    background: #1da851;
+    border-color: #1da851;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+    color: var(--white);
+}
+
+.price-guarantee {
+    font-size: 12px;
+    color: var(--gray-600);
+    margin-top: 16px;
+}
+
+.price-guarantee i {
+    color: var(--accent-green);
+    margin-right: 4px;
+}
+
+/* Programme Content Layout */
+.programme-content-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 60px;
+    align-items: start;
+}
+
+.programme-main {
+    min-width: 0;
+}
+
+/* Schedule Table */
+.schedule-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin: 24px 0;
+}
+
+.schedule-table th,
+.schedule-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.schedule-table th {
+    background: var(--dark-3);
+    font-family: var(--font-heading);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gray-400);
+    font-weight: 500;
+}
+
+.schedule-table td {
+    background: var(--dark-2);
+    font-size: 14px;
+    color: var(--gray-300);
+}
+
+.schedule-table td.rest-day {
+    color: var(--gray-600);
+    font-style: italic;
+}
+
+.schedule-table td strong {
+    color: var(--white);
+}
+
+.schedule-table tr:hover td {
+    background: var(--dark-3);
+}
+
+/* Workout Block */
+.workout-block {
+    background: var(--dark-3);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    margin: 20px 0;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.workout-block h4 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    color: var(--white);
+    margin-bottom: 4px;
+}
+
+.workout-block .workout-subtitle {
+    font-size: 13px;
+    color: var(--primary);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--font-heading);
+}
+
+.exercise-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.exercise-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.exercise-item .exercise-name {
+    font-size: 14px;
+    color: var(--gray-200);
+    font-weight: 500;
+}
+
+.exercise-item .exercise-sets {
+    font-size: 13px;
+    color: var(--primary);
+    font-weight: 600;
+    font-family: var(--font-heading);
+    white-space: nowrap;
+}
+
+.exercise-item .exercise-rest {
+    font-size: 12px;
+    color: var(--gray-600);
+    white-space: nowrap;
+}
+
+/* Diet / Meal Plan */
+.diet-section {
+    margin-top: 40px;
+}
+
+.meal-plan-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.meal-card {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0;
+    background: var(--dark-3);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.meal-card .meal-time {
+    background: rgba(230, 57, 70, 0.08);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.meal-card .meal-time strong {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.meal-card .meal-time span {
+    font-size: 11px;
+    color: var(--gray-600);
+}
+
+.meal-card .meal-content {
+    padding: 20px 24px;
+}
+
+.meal-card .meal-content h5 {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    color: var(--white);
+    margin-bottom: 6px;
+}
+
+.meal-card .meal-content p {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.meal-card .meal-content .meal-macros {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--gray-600);
+}
+
+.meal-card .meal-content .meal-macros span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.meal-card .meal-content .meal-macros strong {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.daily-totals {
+    background: linear-gradient(135deg, rgba(230, 57, 70, 0.08) 0%, var(--dark-3) 100%);
+    border-radius: var(--radius-md);
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid rgba(230, 57, 70, 0.15);
+    margin-top: 20px;
+}
+
+.daily-total-item {
+    text-align: center;
+}
+
+.daily-total-item .total-number {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--white);
+    display: block;
+}
+
+.daily-total-item .total-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray-500);
+}
+
+/* Phase progression cards */
+.phase-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.phase-card {
+    background: var(--dark-3);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.05);
+    text-align: center;
+}
+
+.phase-card .phase-number {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.phase-card h4 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    color: var(--white);
+    margin-bottom: 4px;
+}
+
+.phase-card p {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.6;
+}
+
 /* --- Responsive --- */
 @media (max-width: 1024px) {
     .features-grid,
@@ -1869,6 +2430,16 @@ img {
     
     .content-grid.reverse {
         direction: ltr;
+    }
+
+    .programme-hero-grid,
+    .programme-content-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .programme-price-card {
+        position: static;
     }
 }
 
@@ -1957,6 +2528,40 @@ img {
     .hero-ctas {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .meal-card {
+        grid-template-columns: 1fr;
+    }
+
+    .meal-card .meal-time {
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 14px;
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .exercise-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .daily-totals {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        width: 52px;
+        height: 52px;
+        font-size: 24px;
+    }
+
+    .whatsapp-float .whatsapp-tooltip {
+        display: none;
     }
     
     .timeline::before {
