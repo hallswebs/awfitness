@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members Area | AW Fitness</title>
+    <meta name="description" content="Access your AW Fitness training programmes. Members-only area.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .dashboard { min-height: 100vh; background: var(--dark); padding-top: 100px; }
+        .dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 16px; }
+        .dash-header h1 { font-family: var(--font-heading); font-size: 32px; color: var(--white); }
+        .dash-header h1 span { color: var(--primary); }
+        .dash-welcome { color: var(--gray-400); font-size: 15px; margin-top: 4px; }
+        .dash-actions { display: flex; gap: 12px; }
+        .btn-logout { padding: 10px 20px; background: transparent; border: 1px solid var(--gray-700); color: var(--gray-400); border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: all var(--transition); }
+        .btn-logout:hover { border-color: var(--primary); color: var(--primary); }
+        .dash-section { margin-bottom: 48px; }
+        .dash-section-title { font-family: var(--font-heading); font-size: 20px; letter-spacing: 1px; text-transform: uppercase; color: var(--white); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-800); }
+        .programme-access-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+        .programme-access-card { background: var(--dark-2); border: 1px solid var(--gray-800); border-radius: var(--radius-lg); padding: 32px; transition: border-color var(--transition); }
+        .programme-access-card:hover { border-color: var(--primary); }
+        .programme-access-card .pa-icon { width: 56px; height: 56px; border-radius: var(--radius-sm); background: rgba(230, 57, 70, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+        .programme-access-card .pa-icon i { font-size: 24px; color: var(--primary); }
+        .programme-access-card h3 { font-family: var(--font-heading); font-size: 22px; color: var(--white); margin-bottom: 8px; }
+        .programme-access-card p { color: var(--gray-400); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+        .programme-access-card .pa-meta { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+        .programme-access-card .pa-meta span { color: var(--gray-500); font-size: 13px; }
+        .programme-access-card .pa-meta span i { color: var(--primary); margin-right: 4px; }
+        .btn-access { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; background: var(--primary); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: 14px; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background var(--transition); }
+        .btn-access:hover { background: var(--primary-dark); }
+        .no-programmes { text-align: center; padding: 60px 24px; background: var(--dark-2); border: 1px dashed var(--gray-800); border-radius: var(--radius-lg); }
+        .no-programmes i { font-size: 48px; color: var(--gray-700); margin-bottom: 16px; }
+        .no-programmes h3 { font-family: var(--font-heading); font-size: 20px; color: var(--white); margin-bottom: 8px; }
+        .no-programmes p { color: var(--gray-500); max-width: 400px; margin: 0 auto 20px; }
+        .change-password-form { max-width: 400px; background: var(--dark-2); border: 1px solid var(--gray-800); border-radius: var(--radius-lg); padding: 32px; }
+        .change-password-form .form-group { margin-bottom: 16px; }
+        .change-password-form label { display: block; font-family: var(--font-heading); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-400); margin-bottom: 6px; }
+        .change-password-form input { width: 100%; padding: 12px 14px; background: var(--dark-3); border: 1px solid var(--gray-800); border-radius: var(--radius-sm); color: var(--white); font-family: var(--font-body); font-size: 14px; outline: none; }
+        .change-password-form input:focus { border-color: var(--primary); }
+        .change-password-form .btn-save { padding: 12px 24px; background: var(--primary); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background var(--transition); }
+        .change-password-form .btn-save:hover { background: var(--primary-dark); }
+        .form-msg { padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; margin-top: 12px; display: none; }
+        .form-msg.success { display: block; background: rgba(46, 204, 113, 0.1); border: 1px solid #2ecc71; color: #2ecc71; }
+        .form-msg.error { display: block; background: rgba(230, 57, 70, 0.1); border: 1px solid var(--primary); color: var(--primary-light); }
+        @media (max-width: 768px) {
+            .dash-header { flex-direction: column; align-items: flex-start; }
+            .programme-access-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-aw">AW</span>
+                <span class="logo-fitness">FITNESS</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="programmes.html" class="nav-link">Programmes</a></li>
+                <li><a href="kettlebell.html" class="nav-link">Kettlebells</a></li>
+                <li><a href="boxing.html" class="nav-link">Boxing</a></li>
+                <li><a href="about.html" class="nav-link">About Alfie</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="members.html" class="nav-link nav-login active"><i class="fas fa-user"></i> My Account</a></li>
+            </ul>
+            <a href="#" class="nav-cta" id="navLogout" onclick="AWAuth.logout(); return false;">Logout</a>
+            <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dash-header">
+                <div>
+                    <h1>Welcome back, <span id="memberName"></span></h1>
+                    <p class="dash-welcome">Your AW Fitness members area — access your programmes below.</p>
+                </div>
+                <div class="dash-actions">
+                    <a href="#" class="btn-logout" onclick="AWAuth.logout(); return false;"><i class="fas fa-sign-out-alt" style="margin-right: 6px;"></i> Logout</a>
+                </div>
+            </div>
+
+            <!-- My Programmes -->
+            <div class="dash-section">
+                <h2 class="dash-section-title"><i class="fas fa-dumbbell" style="color: var(--primary); margin-right: 8px;"></i> My Programmes</h2>
+                <div id="programmesList" class="programme-access-cards">
+                    <!-- Filled by JS -->
+                </div>
+                <div id="noProgrammes" class="no-programmes" style="display: none;">
+                    <i class="fas fa-lock"></i>
+                    <h3>No Programmes Yet</h3>
+                    <p>You don't have any programme access yet. Contact Alfie to purchase a programme and get started.</p>
+                    <a href="https://wa.me/447989783885?text=Hi%20Alfie%2C%20I%27d%20like%20to%20purchase%20a%20programme" class="btn btn-primary" target="_blank">
+                        <span>Enquire via WhatsApp</span>
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Change Password -->
+            <div class="dash-section">
+                <h2 class="dash-section-title"><i class="fas fa-key" style="color: var(--primary); margin-right: 8px;"></i> Change Password</h2>
+                <div class="change-password-form">
+                    <form id="changePasswordForm">
+                        <div class="form-group">
+                            <label for="currentPass">Current Password</label>
+                            <input type="password" id="currentPass" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPass">New Password</label>
+                            <input type="password" id="newPass" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPass">Confirm New Password</label>
+                            <input type="password" id="confirmPass" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn-save"><i class="fas fa-save" style="margin-right: 6px;"></i> Update Password</button>
+                        <div class="form-msg" id="passMsg"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Need Help -->
+            <div class="dash-section" style="margin-bottom: 0; padding-bottom: 60px;">
+                <h2 class="dash-section-title"><i class="fas fa-headset" style="color: var(--primary); margin-right: 8px;"></i> Need Help?</h2>
+                <p style="color: var(--gray-400); margin-bottom: 16px;">Got a question about your programme or need support? Contact Alfie directly.</p>
+                <a href="https://wa.me/447989783885?text=Hi%20Alfie%2C%20I%20need%20help%20with%20my%20programme" class="btn btn-primary" target="_blank" style="margin-right: 12px;">
+                    <i class="fab fa-whatsapp" style="margin-right: 8px;"></i> WhatsApp Alfie
+                </a>
+                <a href="mailto:info@awfitness.co.uk" class="btn btn-outline-light">
+                    <i class="fas fa-envelope" style="margin-right: 8px;"></i> Email
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        AWAuth.init();
+
+        // Protect page — must be logged in as member
+        const session = AWAuth.getSession();
+        if (!session) {
+            window.location.href = 'login.html';
+        } else if (session.role === 'staff') {
+            window.location.href = 'staff.html';
+        }
+
+        // Programme definitions
+        const PROGRAMMES = {
+            kettlebell: {
+                name: '8-Week Kettlebell Programme',
+                icon: 'fas fa-dumbbell',
+                desc: 'Full 8-week kettlebell training programme with 6 sessions (A-F), 2 cardio workouts, 4-phase progression, nutrition plan, and kettlebell weight guide.',
+                duration: '8 Weeks',
+                level: 'All Levels',
+                frequency: '5x/week',
+                link: 'programme-kettlebell-foundations.html'
+            },
+            boxing: {
+                name: 'Boxing Fundamentals',
+                icon: 'fas fa-hand-fist',
+                desc: 'Complete boxing technique programme covering stance, footwork, combinations, defensive skills, conditioning workouts, and fighter\'s nutrition plan.',
+                duration: '8 Weeks',
+                level: 'Beginner',
+                frequency: '3x/week',
+                link: 'programme-boxing-fundamentals.html'
+            }
+        };
+
+        if (session) {
+            // Set member name
+            document.getElementById('memberName').textContent = session.name || session.username;
+
+            // Show programmes
+            const listEl = document.getElementById('programmesList');
+            const noEl = document.getElementById('noProgrammes');
+            const userProgs = session.programmes || [];
+
+            if (userProgs.length === 0) {
+                listEl.style.display = 'none';
+                noEl.style.display = 'block';
+            } else {
+                let html = '';
+                userProgs.forEach(id => {
+                    const prog = PROGRAMMES[id];
+                    if (prog) {
+                        html += `
+                        <div class="programme-access-card">
+                            <div class="pa-icon"><i class="${prog.icon}"></i></div>
+                            <h3>${prog.name}</h3>
+                            <p>${prog.desc}</p>
+                            <div class="pa-meta">
+                                <span><i class="fas fa-clock"></i> ${prog.duration}</span>
+                                <span><i class="fas fa-signal"></i> ${prog.level}</span>
+                                <span><i class="fas fa-calendar"></i> ${prog.frequency}</span>
+                            </div>
+                            <a href="${prog.link}" class="btn-access">
+                                <i class="fas fa-play"></i> Access Programme
+                            </a>
+                        </div>`;
+                    }
+                });
+                listEl.innerHTML = html;
+            }
+
+            // Change password
+            document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const msgEl = document.getElementById('passMsg');
+                const current = document.getElementById('currentPass').value;
+                const newP = document.getElementById('newPass').value;
+                const confirm = document.getElementById('confirmPass').value;
+
+                if (newP !== confirm) {
+                    msgEl.className = 'form-msg error';
+                    msgEl.textContent = 'New passwords do not match.';
+                    return;
+                }
+                if (newP.length < 6) {
+                    msgEl.className = 'form-msg error';
+                    msgEl.textContent = 'Password must be at least 6 characters.';
+                    return;
+                }
+                // Verify current password
+                const loginCheck = AWAuth.login(session.username, current);
+                if (!loginCheck.success) {
+                    msgEl.className = 'form-msg error';
+                    msgEl.textContent = 'Current password is incorrect.';
+                    return;
+                }
+                // Update password
+                const result = AWAuth.updateMemberPassword(session.username, newP);
+                if (result) {
+                    msgEl.className = 'form-msg success';
+                    msgEl.textContent = 'Password updated successfully!';
+                    document.getElementById('changePasswordForm').reset();
+                } else {
+                    msgEl.className = 'form-msg error';
+                    msgEl.textContent = 'Failed to update password. Please try again.';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

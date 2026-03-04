@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | AW Fitness</title>
+    <meta name="description" content="Login to access your AW Fitness programme. Members and staff access.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--dark); padding: 24px; }
+        .login-card { background: var(--dark-2); border: 1px solid var(--gray-800); border-radius: var(--radius-lg); padding: 48px 40px; max-width: 440px; width: 100%; }
+        .login-logo { text-align: center; margin-bottom: 32px; }
+        .login-logo a { text-decoration: none; }
+        .login-logo .logo-aw { font-family: var(--font-heading); font-size: 42px; font-weight: 700; color: var(--white); letter-spacing: 2px; }
+        .login-logo .logo-fitness { font-family: var(--font-heading); font-size: 42px; font-weight: 300; color: var(--primary); letter-spacing: 2px; }
+        .login-title { font-family: var(--font-heading); font-size: 24px; color: var(--white); text-align: center; margin-bottom: 8px; }
+        .login-subtitle { color: var(--gray-500); font-size: 14px; text-align: center; margin-bottom: 32px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-family: var(--font-heading); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-400); margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 14px 16px; background: var(--dark-3); border: 1px solid var(--gray-800); border-radius: var(--radius-sm); color: var(--white); font-family: var(--font-body); font-size: 15px; transition: border-color var(--transition); outline: none; }
+        .form-group input:focus { border-color: var(--primary); }
+        .form-group input::placeholder { color: var(--gray-600); }
+        .login-btn { width: 100%; padding: 16px; background: var(--primary); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: 16px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background var(--transition); margin-top: 8px; }
+        .login-btn:hover { background: var(--primary-dark); }
+        .login-error { background: rgba(230, 57, 70, 0.1); border: 1px solid var(--primary); color: var(--primary-light); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 14px; margin-bottom: 20px; display: none; text-align: center; }
+        .login-error.show { display: block; }
+        .login-divider { text-align: center; color: var(--gray-600); font-size: 13px; margin: 24px 0; position: relative; }
+        .login-divider::before, .login-divider::after { content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: var(--gray-800); }
+        .login-divider::before { left: 0; }
+        .login-divider::after { right: 0; }
+        .login-footer { text-align: center; margin-top: 24px; }
+        .login-footer p { color: var(--gray-500); font-size: 14px; }
+        .login-footer a { color: var(--primary); text-decoration: none; }
+        .login-footer a:hover { text-decoration: underline; }
+        .login-back { text-align: center; margin-top: 16px; }
+        .login-back a { color: var(--gray-500); font-size: 13px; text-decoration: none; }
+        .login-back a:hover { color: var(--white); }
+        .show-password { display: flex; align-items: center; gap: 8px; margin-top: 8px; cursor: pointer; }
+        .show-password input[type="checkbox"] { accent-color: var(--primary); }
+        .show-password label { color: var(--gray-500); font-size: 13px; cursor: pointer; text-transform: none; letter-spacing: 0; margin-bottom: 0; }
+    </style>
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-card">
+            <div class="login-logo">
+                <a href="index.html">
+                    <span class="logo-aw">AW</span><span class="logo-fitness">FITNESS</span>
+                </a>
+            </div>
+            <h1 class="login-title">Member Login</h1>
+            <p class="login-subtitle">Access your training programme</p>
+
+            <div class="login-error" id="loginError"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                    <div class="show-password">
+                        <input type="checkbox" id="showPass">
+                        <label for="showPass">Show password</label>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-lock" style="margin-right: 8px;"></i> Log In
+                </button>
+            </form>
+
+            <div class="login-divider">or</div>
+
+            <div class="login-footer">
+                <p>Don't have an account? <a href="https://wa.me/447989783885?text=Hi%20Alfie%2C%20I%27d%20like%20to%20enquire%20about%20purchasing%20a%20programme" target="_blank">Enquire via WhatsApp</a></p>
+            </div>
+            <div class="login-back">
+                <a href="index.html"><i class="fas fa-arrow-left" style="margin-right: 4px;"></i> Back to website</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // If already logged in, redirect
+        AWAuth.init();
+        const session = AWAuth.getSession();
+        if (session) {
+            window.location.href = session.role === 'staff' ? 'staff.html' : 'members.html';
+        }
+
+        // Show/hide password
+        document.getElementById('showPass').addEventListener('change', function() {
+            document.getElementById('password').type = this.checked ? 'text' : 'password';
+        });
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('loginError');
+
+            const result = AWAuth.login(username, password);
+            if (result.success) {
+                window.location.href = result.role === 'staff' ? 'staff.html' : 'members.html';
+            } else {
+                errorEl.textContent = result.message;
+                errorEl.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>

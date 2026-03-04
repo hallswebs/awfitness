@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard | AW Fitness</title>
+    <meta name="description" content="AW Fitness staff dashboard. Manage members and programme access.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .dashboard { min-height: 100vh; background: var(--dark); padding-top: 100px; padding-bottom: 60px; }
+        .dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 16px; }
+        .dash-header h1 { font-family: var(--font-heading); font-size: 32px; color: var(--white); }
+        .dash-header h1 span { color: var(--primary); }
+        .dash-welcome { color: var(--gray-400); font-size: 15px; margin-top: 4px; }
+        .btn-logout { padding: 10px 20px; background: transparent; border: 1px solid var(--gray-700); color: var(--gray-400); border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: all var(--transition); }
+        .btn-logout:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 40px; }
+        .stat-card { background: var(--dark-2); border: 1px solid var(--gray-800); border-radius: var(--radius-lg); padding: 24px; text-align: center; }
+        .stat-card .stat-num { font-family: var(--font-heading); font-size: 36px; color: var(--primary); }
+        .stat-card .stat-label { font-family: var(--font-heading); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); margin-top: 4px; }
+
+        /* Sections */
+        .dash-section { margin-bottom: 48px; }
+        .dash-section-title { font-family: var(--font-heading); font-size: 20px; letter-spacing: 1px; text-transform: uppercase; color: var(--white); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-800); }
+
+        /* Add Member Form */
+        .add-member-form { background: var(--dark-2); border: 1px solid var(--gray-800); border-radius: var(--radius-lg); padding: 32px; max-width: 600px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-family: var(--font-heading); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-400); margin-bottom: 6px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 14px; background: var(--dark-3); border: 1px solid var(--gray-800); border-radius: var(--radius-sm); color: var(--white); font-family: var(--font-body); font-size: 14px; outline: none; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
+        .form-group select { cursor: pointer; appearance: auto; }
+        .checkbox-group { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 4px; }
+        .checkbox-group label { display: flex; align-items: center; gap: 8px; color: var(--gray-300); font-size: 14px; cursor: pointer; text-transform: none; letter-spacing: 0; margin-bottom: 0; }
+        .checkbox-group input[type="checkbox"] { accent-color: var(--primary); width: 16px; height: 16px; }
+        .btn-add { padding: 14px 28px; background: var(--primary); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background var(--transition); }
+        .btn-add:hover { background: var(--primary-dark); }
+        .form-msg { padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; margin-top: 12px; display: none; }
+        .form-msg.success { display: block; background: rgba(46, 204, 113, 0.1); border: 1px solid #2ecc71; color: #2ecc71; }
+        .form-msg.error { display: block; background: rgba(230, 57, 70, 0.1); border: 1px solid var(--primary); color: var(--primary-light); }
+
+        /* Members Table */
+        .members-table-wrap { overflow-x: auto; }
+        .members-table { width: 100%; border-collapse: collapse; background: var(--dark-2); border-radius: var(--radius-lg); overflow: hidden; }
+        .members-table th { font-family: var(--font-heading); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-400); background: var(--dark-3); padding: 14px 16px; text-align: left; }
+        .members-table td { padding: 14px 16px; color: var(--gray-300); font-size: 14px; border-bottom: 1px solid var(--gray-800); }
+        .members-table tr:last-child td { border-bottom: none; }
+        .members-table tr:hover td { background: rgba(255,255,255,0.02); }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-family: var(--font-heading); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; }
+        .badge-kb { background: rgba(230, 57, 70, 0.15); color: var(--primary-light); }
+        .badge-box { background: rgba(29, 53, 87, 0.4); color: #7eb8da; }
+        .btn-small { padding: 6px 12px; border: 1px solid var(--gray-700); background: transparent; color: var(--gray-400); border-radius: var(--radius-sm); font-size: 12px; cursor: pointer; transition: all var(--transition); margin-right: 4px; }
+        .btn-small:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-small.danger:hover { border-color: #e74c3c; color: #e74c3c; }
+        .no-members { text-align: center; padding: 40px; color: var(--gray-600); font-size: 15px; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; display: none; align-items: center; justify-content: center; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: var(--dark-2); border: 1px solid var(--gray-800); border-radius: var(--radius-lg); padding: 32px; max-width: 480px; width: 90%; }
+        .modal h3 { font-family: var(--font-heading); font-size: 20px; color: var(--white); margin-bottom: 20px; }
+        .modal-btns { display: flex; gap: 12px; margin-top: 20px; }
+        .btn-cancel { padding: 10px 20px; background: transparent; border: 1px solid var(--gray-700); color: var(--gray-400); border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+        .btn-confirm { padding: 10px 20px; background: var(--primary); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .dash-header { flex-direction: column; align-items: flex-start; }
+            .form-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-aw">AW</span>
+                <span class="logo-fitness">FITNESS</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="programmes.html" class="nav-link">Programmes</a></li>
+                <li><a href="kettlebell.html" class="nav-link">Kettlebells</a></li>
+                <li><a href="boxing.html" class="nav-link">Boxing</a></li>
+                <li><a href="about.html" class="nav-link">About Alfie</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="staff.html" class="nav-link nav-login active"><i class="fas fa-shield-halved"></i> Staff</a></li>
+            </ul>
+            <a href="#" class="nav-cta" id="navLogout" onclick="AWAuth.logout(); return false;">Logout</a>
+            <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="container">
+            <!-- Header -->
+            <div class="dash-header">
+                <div>
+                    <h1><span>Staff</span> Dashboard</h1>
+                    <p class="dash-welcome">Manage members, assign programmes, and control access.</p>
+                </div>
+                <a href="#" class="btn-logout" onclick="AWAuth.logout(); return false;"><i class="fas fa-sign-out-alt" style="margin-right: 6px;"></i> Logout</a>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-num" id="statTotal">0</div>
+                    <div class="stat-label">Total Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="statKB">0</div>
+                    <div class="stat-label">Kettlebell Access</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="statBox">0</div>
+                    <div class="stat-label">Boxing Access</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="statBoth">0</div>
+                    <div class="stat-label">Both Programmes</div>
+                </div>
+            </div>
+
+            <!-- Add Member -->
+            <div class="dash-section">
+                <h2 class="dash-section-title"><i class="fas fa-user-plus" style="color: var(--primary); margin-right: 8px;"></i> Add New Member</h2>
+                <div class="add-member-form">
+                    <form id="addMemberForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newName">Full Name</label>
+                                <input type="text" id="newName" placeholder="e.g. John Smith" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newUsername">Username</label>
+                                <input type="text" id="newUsername" placeholder="e.g. johnsmith" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Password</label>
+                            <input type="text" id="newPassword" placeholder="Set a password for the member" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>Programme Access</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" id="progKB" value="kettlebell"> 8-Week Kettlebell Programme</label>
+                                <label><input type="checkbox" id="progBox" value="boxing"> Boxing Fundamentals</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-add"><i class="fas fa-plus" style="margin-right: 6px;"></i> Add Member</button>
+                        <div class="form-msg" id="addMsg"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Members List -->
+            <div class="dash-section">
+                <h2 class="dash-section-title"><i class="fas fa-users" style="color: var(--primary); margin-right: 8px;"></i> All Members</h2>
+                <div class="members-table-wrap">
+                    <table class="members-table" id="membersTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Programmes</th>
+                                <th>Added</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersBody">
+                        </tbody>
+                    </table>
+                    <div class="no-members" id="noMembers" style="display: none;">No members yet. Add your first member above.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h3><i class="fas fa-edit" style="color: var(--primary); margin-right: 8px;"></i> Edit Member</h3>
+            <form id="editForm">
+                <input type="hidden" id="editUsername">
+                <div class="form-group">
+                    <label for="editName">Full Name</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPassword">New Password (leave blank to keep current)</label>
+                    <input type="text" id="editPassword" placeholder="Leave blank to keep current">
+                </div>
+                <div class="form-group">
+                    <label>Programme Access</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="editKB" value="kettlebell"> 8-Week Kettlebell Programme</label>
+                        <label><input type="checkbox" id="editBox" value="boxing"> Boxing Fundamentals</label>
+                    </div>
+                </div>
+                <div class="modal-btns">
+                    <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn-confirm"><i class="fas fa-save" style="margin-right: 4px;"></i> Save Changes</button>
+                </div>
+                <div class="form-msg" id="editMsg"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <h3><i class="fas fa-trash" style="color: var(--primary); margin-right: 8px;"></i> Remove Member</h3>
+            <p style="color: var(--gray-400); margin-bottom: 8px;">Are you sure you want to remove <strong id="deleteName" style="color: var(--white);"></strong>?</p>
+            <p style="color: var(--gray-600); font-size: 13px;">This will revoke their programme access immediately.</p>
+            <div class="modal-btns">
+                <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+                <button type="button" class="btn-confirm" id="confirmDelete" style="background: #e74c3c;"><i class="fas fa-trash" style="margin-right: 4px;"></i> Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        AWAuth.init();
+
+        // Protect page — staff only
+        const session = AWAuth.getSession();
+        if (!session || session.role !== 'staff') {
+            window.location.href = 'login.html';
+        }
+
+        // Render everything
+        function refreshDashboard() {
+            const members = AWAuth.getMembers();
+
+            // Stats
+            document.getElementById('statTotal').textContent = members.length;
+            document.getElementById('statKB').textContent = members.filter(m => m.programmes.includes('kettlebell')).length;
+            document.getElementById('statBox').textContent = members.filter(m => m.programmes.includes('boxing')).length;
+            document.getElementById('statBoth').textContent = members.filter(m => m.programmes.includes('kettlebell') && m.programmes.includes('boxing')).length;
+
+            // Members table
+            const tbody = document.getElementById('membersBody');
+            const noMembers = document.getElementById('noMembers');
+
+            if (members.length === 0) {
+                tbody.innerHTML = '';
+                noMembers.style.display = 'block';
+                document.getElementById('membersTable').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('membersTable').style.display = 'table';
+            noMembers.style.display = 'none';
+
+            tbody.innerHTML = members.map(m => {
+                const badges = m.programmes.map(p => {
+                    if (p === 'kettlebell') return '<span class="badge badge-kb">Kettlebell</span>';
+                    if (p === 'boxing') return '<span class="badge badge-box">Boxing</span>';
+                    return '';
+                }).join(' ');
+                const date = m.createdAt ? new Date(m.createdAt).toLocaleDateString('en-GB') : '—';
+                return `<tr>
+                    <td><strong style="color: var(--white);">${m.name}</strong></td>
+                    <td>${m.username}</td>
+                    <td>${badges || '<span style="color: var(--gray-600);">None</span>'}</td>
+                    <td>${date}</td>
+                    <td>
+                        <button class="btn-small" onclick="openEditModal('${m.username}')"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn-small danger" onclick="openDeleteModal('${m.username}', '${m.name}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        // Add member form
+        document.getElementById('addMemberForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const msgEl = document.getElementById('addMsg');
+            const name = document.getElementById('newName').value.trim();
+            const username = document.getElementById('newUsername').value.trim().toLowerCase();
+            const password = document.getElementById('newPassword').value;
+            const programmes = [];
+            if (document.getElementById('progKB').checked) programmes.push('kettlebell');
+            if (document.getElementById('progBox').checked) programmes.push('boxing');
+
+            const result = AWAuth.addMember(username, password, name, programmes);
+            if (result.success) {
+                msgEl.className = 'form-msg success';
+                msgEl.textContent = `Member "${name}" added successfully with ${programmes.length} programme(s).`;
+                this.reset();
+                refreshDashboard();
+            } else {
+                msgEl.className = 'form-msg error';
+                msgEl.textContent = result.message;
+            }
+            setTimeout(() => { msgEl.className = 'form-msg'; }, 4000);
+        });
+
+        // Edit modal
+        function openEditModal(username) {
+            const members = AWAuth.getMembers();
+            const member = members.find(m => m.username === username);
+            if (!member) return;
+            document.getElementById('editUsername').value = member.username;
+            document.getElementById('editName').value = member.name;
+            document.getElementById('editPassword').value = '';
+            document.getElementById('editKB').checked = member.programmes.includes('kettlebell');
+            document.getElementById('editBox').checked = member.programmes.includes('boxing');
+            document.getElementById('editMsg').className = 'form-msg';
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('editUsername').value;
+            const newPassword = document.getElementById('editPassword').value;
+            const programmes = [];
+            if (document.getElementById('editKB').checked) programmes.push('kettlebell');
+            if (document.getElementById('editBox').checked) programmes.push('boxing');
+
+            // Update programmes
+            AWAuth.updateMemberProgrammes(username, programmes);
+
+            // Update name
+            const members = AWAuth.getMembers();
+            const idx = members.findIndex(m => m.username === username);
+            if (idx !== -1) {
+                members[idx].name = document.getElementById('editName').value.trim();
+                localStorage.setItem('aw_members', JSON.stringify(members));
+            }
+
+            // Update password if provided
+            if (newPassword && newPassword.length >= 6) {
+                AWAuth.updateMemberPassword(username, newPassword);
+            }
+
+            const msgEl = document.getElementById('editMsg');
+            msgEl.className = 'form-msg success';
+            msgEl.textContent = 'Member updated successfully.';
+            refreshDashboard();
+            setTimeout(() => { closeEditModal(); }, 1000);
+        });
+
+        // Delete modal
+        let deleteUsername = '';
+        function openDeleteModal(username, name) {
+            deleteUsername = username;
+            document.getElementById('deleteName').textContent = name;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+            deleteUsername = '';
+        }
+
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            if (deleteUsername) {
+                AWAuth.removeMember(deleteUsername);
+                closeDeleteModal();
+                refreshDashboard();
+            }
+        });
+
+        // Close modals on overlay click
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) closeEditModal();
+        });
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDeleteModal();
+        });
+
+        // Initial render
+        refreshDashboard();
+    </script>
+</body>
+</html>

@@ -8,8 +8,31 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .auth-gate { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--dark); padding: 24px; text-align: center; }
+        .auth-gate-card { max-width: 460px; }
+        .auth-gate-card i.gate-icon { font-size: 48px; color: var(--primary); margin-bottom: 16px; }
+        .auth-gate-card h2 { font-family: var(--font-heading); font-size: 28px; color: var(--white); margin-bottom: 12px; }
+        .auth-gate-card p { color: var(--gray-400); margin-bottom: 24px; line-height: 1.6; }
+        .auth-gate-card .gate-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        #protectedContent { display: none; }
+    </style>
 </head>
 <body>
+    <!-- Auth Gate (shown if not logged in) -->
+    <div class="auth-gate" id="authGate">
+        <div class="auth-gate-card">
+            <i class="fas fa-lock gate-icon"></i>
+            <h2>Members Only</h2>
+            <p>This programme is available to AW Fitness members. Log in to access your training plan, or enquire to purchase.</p>
+            <div class="gate-btns">
+                <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Member Login</a>
+                <a href="https://wa.me/447989783885?text=Hi%20Alfie%2C%20I%27d%20like%20to%20enquire%20about%20the%20Boxing%20Fundamentals%20programme" class="btn btn-outline-light" target="_blank"><i class="fab fa-whatsapp" style="margin-right: 8px;"></i> Enquire</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="protectedContent">
     <div id="preloader"><div class="loader"><span class="loader-text">AW</span></div></div>
 
     <nav class="navbar" id="navbar">
@@ -17,13 +40,14 @@
             <a href="index.html" class="nav-logo"><span class="logo-aw">AW</span><span class="logo-fitness">FITNESS</span></a>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link">Home</a></li>
-                <li><a href="programmes.html" class="nav-link active">Programmes</a></li>
+                <li><a href="programmes.html" class="nav-link">Programmes</a></li>
                 <li><a href="kettlebell.html" class="nav-link">Kettlebells</a></li>
                 <li><a href="boxing.html" class="nav-link">Boxing</a></li>
                 <li><a href="about.html" class="nav-link">About Alfie</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="members.html" class="nav-link nav-login"><i class="fas fa-user"></i> My Account</a></li>
             </ul>
-            <a href="programmes.html" class="nav-cta">Start Now</a>
+            <a href="members.html" class="nav-cta">My Account</a>
             <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
         </div>
     </nav>
@@ -300,6 +324,17 @@
     </footer>
 
     <a href="https://wa.me/447989783885?text=Hi%20Alfie%2C%20I%27m%20interested%20in%20AW%20Fitness%20training" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><i class="fab fa-whatsapp"></i><span class="whatsapp-tooltip">Chat with Alfie on WhatsApp</span></a>
+    </div><!-- /protectedContent -->
+
+    <script src="js/auth.js"></script>
+    <script>
+        AWAuth.init();
+        const session = AWAuth.getSession();
+        if (session && (session.role === 'staff' || AWAuth.hasProgramme('boxing'))) {
+            document.getElementById('authGate').style.display = 'none';
+            document.getElementById('protectedContent').style.display = 'block';
+        }
+    </script>
     <script src="js/main.js"></script>
 </body>
 </html>
