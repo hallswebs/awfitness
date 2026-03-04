@@ -2615,7 +2615,7 @@ img {
     }
 
     .nav-menu .nav-book-mobile {
-        display: list-item;
+        display: list-item !important;
     }
 
     .nav-book-mobile a {
